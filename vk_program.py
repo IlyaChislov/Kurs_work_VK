@@ -1,7 +1,7 @@
 import requests
-from urllib.parse import urlencode
-import pprint
-from yadisk import YaDisk
+import json
+import vk_class
+import yandex_class
 # app_id = '51792587'
 # base_url = 'https://oauth.vk.com/authorize'
 # params={
@@ -21,39 +21,46 @@ from yadisk import YaDisk
 # }
 # response=requests.get(base_url, params=params_yandex)
 # print(response.url)
-token_vk='vk1.a.77EDsiAquiSMVsIdCdTqIoEFqx3-J9euk160rX_yolfCOaG_bojE3oG7r-4nIwsEYJNqWRkqLNFlymD0oHoiyxXi3oNnf1ks7eQUI5GDJBmXVCHmQTh9r0f5ZyBzKmshaNavn1L2B8eOuqJwuwELoV2I87dPrkcV1OnIooEwmIBdNnBFnMuCbyErfSHOfzglxzZrlY9UoJcNbMzdZiRaVg'
-token_yandex='y0_AgAAAAAFmdz2AArRrwAAAADx_0S8TuTq6oibSaCtNNXm5Cx94MDHHBs'
 
-class VK_API_PHOTOS:
-    API_BASE_URL = 'https://api.vk.com/method/photos.get'
-
-    def __init__(self, token_vk, owner_id):
-        self.token_vk=token_k
-        self.owner_id=owner_id
-
-    def get_params(self):
-        params={
-            'access_token': token_vk,
-            'v': '5.154',
-            'extended': 1
-        }
-        return params
-
-    def get_photos(self):
-        params=self.get_params()
-        params.update({'owner_id': self.owner_id, 'album_id': 'profile'})
-        response=requests.get(self.API_BASE_URL, params=params)
-        return response.json()
+if __name__=='__main__':
+    # owner_id=76879487
+    # token_yandex='y0_AgAAAAAFmdz2AArRrwAAAADx_0S8TuTq6oibSaCtNNXm5Cx94MDHHBs'
+    print("Введите id страницы пользователя вк, owner_id=")
+    owner_id=input()
+    print("Введите токен с полигона яндекс диска, token_yandex=")
+    token_yandex = str(input())
+    vk_page=vk_class.VK_API_PHOTOS(vk_class.token_vk, owner_id)
+    class1=yandex_class.YANDEX_DISK_API(token_yandex, vk_page.get_photos())
+    photos_list=class1.save_photos()
+    with open('data_file,json', "w") as f:
+        json.dump(photos_list, f)
 
 
-# first_page=VK_API_PHOTOS(token_vk, 76879487)
+
+
+
 # photos=first_page.get_photos()
 # pprint.pprint(photos)
-disk = YaDisk(token=token_yandex)
-if disk.check_token():
-    print("Авторизация прошла успешно")
-else:
-    print("Ошибка авторизации")
+# list_file_names=[]
+# for files in photos['response']['items']:
+#     file_url=files['sizes'][-1]['url']
+#     file_name=files['likes']['count']
+#     if file_name in list_file_names:
+#         file_name+=str(files['date'])
+#     else:
+#         list_file_names.append(file_name)
+#     photo=requests.get(file_url)
+#     print(file_url)
+#     with open('C:/Users/User/Desktop/save_photos/'+str(file_name)+'jpeg', 'wb') as f:
+#         f.write(photo.content)
+
+
+
+# disk = YaDisk(token=token_yandex)
+# if disk.check_token():
+#     print("Авторизация прошла успешно")
+# else:
+#     print("Ошибка авторизации")
 
 
 
